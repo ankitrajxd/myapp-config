@@ -10,7 +10,7 @@ spec:
       - setWeight: 20
       - pause: {}
       - setWeight: 40
-      - pause: {duration: 10}
+      - pause: {}
       - setWeight: 60
       - pause: {duration: 10}
       - setWeight: 80
@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: myapp-rollout
-          image: ankitrajxd/myapp:1.1
+          image: ankitrajxd/myapp:1.2
           ports:
             - containerPort: 80
 ---
@@ -38,6 +38,7 @@ spec:
     app: myapp-rollout
   ports:
     - protocol: TCP
+      port: 82
       targetPort: 80
-  type: NodePort
+  type: LoadBalancer
 ---
