@@ -40,7 +40,7 @@ spec:
     app: myapp
   ports:
     - protocol: TCP
-      port: 80
+      port: 30003
       targetPort: 80
-  type: LoadBalancer
+  type: NodePort
 ---
