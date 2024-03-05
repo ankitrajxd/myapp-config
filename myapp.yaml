@@ -38,7 +38,6 @@ spec:
     app: myapp-rollout
   ports:
     - protocol: TCP
-      port: 30003
       targetPort: 80
   type: NodePort
 ---
