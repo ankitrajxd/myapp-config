@@ -1,7 +1,7 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Rollout
 metadata:
-  name: myapp-deployment
+  name: myapp-rollout
 spec:
   replicas: 5 
   strategy:
@@ -17,27 +17,25 @@ spec:
       - pause: {duration: 10}
   selector:
     matchLabels:
-      app: myapp
+      app: myapp-rollout
   template:
     metadata:
       labels:
-        app: myapp
+        app: myapp-rollout
     spec:
       containers:
-        - name: myapp
+        - name: myapp-rollout
           image: ankitrajxd/myapp:1.0
           ports:
             - containerPort: 80
 ---
-# bankapp-service.yaml
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp-service
+  name: myapp-rollout-service
 spec:
   selector:
-    app: myapp
+    app: myapp-rollout
   ports:
     - protocol: TCP
       port: 30003
