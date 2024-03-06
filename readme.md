@@ -198,10 +198,10 @@ Follow these steps to set up this GitOps pipeline:
 **1. Managing Multiple Applications:** 
     As the number of applications you manage through the pipeline increases, maintaining and synchronizing their configurations can become complex.
 
-Potential Solution - Start with a Simple Setup: Begin with a single application and gradually scale up as you gain confidence and experience.
+*Potential Solution - Start with a Simple Setup: Begin with a single application and gradually scale up as you gain confidence and experience.*
 
 **2. Visibility into Rollouts:**
 
 Tracking the progress and health of rollouts, especially during canary deployments, can require additional monitoring tools or integrations.
 
-Potential Solution - Integrate tools like Prometheus and Grafana to monitor application health and track rollout progress.
+*Potential Solution - Integrate tools like Prometheus and Grafana to monitor application health and track rollout progress.*
