@@ -63,7 +63,8 @@ Follow these steps to set up this GitOps pipeline:
         - Name: Set a name for your application (e.g., myapp)
         - Repository URL: Provide the URL of your Git repository.
         - Path: Leave this blank or set it to the path of your YAML file within the repository (if applicable)
-        - Cluster: Select the appropriate Kubernetes cluster ( In this case it's local cluster)
+        - Cluster: Select the appropriate Kubernetes cluster ( In this case it's `https://kubernetes.default.svc`)
+
     - Click "Sync" to allow Argo CD to detect the deployment manifest and apply it to your cluster.
 
     - Argo CD should automatically deploy your application. You can verify this by:
@@ -121,7 +122,7 @@ Follow these steps to set up this GitOps pipeline:
 
     Argo Rollouts will begin shifting traffic to the new version in a controlled manner, following the weight percentages (e.g., setWeight) and pausing durations (e.g., pause) defined in the rollout section of YAML file.
 
-*This allows for testing the new version with a small portion of user base (canary) before promoting it to everyone.*
+    *This allows for testing the new version with a small portion of user base (canary) before promoting it to everyone.*
 
 * Promotion:
 
