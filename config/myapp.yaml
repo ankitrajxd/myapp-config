@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: myapp-rollout
 spec:
-  replicas: 5 
+  replicas: 6 
   strategy:
     canary:
       steps:
