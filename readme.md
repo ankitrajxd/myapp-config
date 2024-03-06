@@ -55,6 +55,8 @@ Follow these steps to set up this GitOps pipeline:
             ```
             docker push myapp:1.0
             ```
+
+            ![img](./images/dockerhub-repository.png)
             
 >  **Note:**  Before pushing the image to docker registry, you need to create a repository on dockerhub and tag the image with same respository name.
 
@@ -72,8 +74,14 @@ Follow these steps to set up this GitOps pipeline:
         - Project: Select a project (or create a new one)
         - Name: Set a name for your application (e.g., myapp)
         - Repository URL: Provide the URL of your Git repository.
-        - Path: Leave this blank or set it to the path of your YAML file within the repository (In this case, yaml file is stored in `config` folder)
+
+          
+        - Path: Leave this blank or set it to the path of your YAML file within the repository (In this case, yaml file is stored in `./config` folder)
+
+            ![img](./images/argocd-git-source.png)
         - Cluster: Select the appropriate Kubernetes cluster ( In this case it's `https://kubernetes.default.svc`) and the namespace in which our web app will get deployed.
+
+            ![img](./images/k8s-cluster-setup.png)
 
     - Click "Sync" to allow Argo CD to detect the deployment manifest and apply it to your cluster.
 
@@ -81,6 +89,8 @@ Follow these steps to set up this GitOps pipeline:
 
         - Using `kubectl get pods` to see if pods for your application have been created.
         - Accessing the application service port (e.g., `http://localhost:82`)
+
+            ![img](./images/app-old-version.png)
 
 
 7. **Implement Canary Release with Argo Rollouts:**
@@ -109,9 +119,13 @@ Follow these steps to set up this GitOps pipeline:
     
 
 8. **Trigger a Rollout:**
-    - Make changes to the application (Change the release text in html file and bump it to next version.), update the Docker image, and push the changes to docker registry.
+    - Make changes to the application (`Change the release text in html file and bump it to next version.`), update the Docker image, and push the changes to docker registry.
+
+        ![img](./images/version-update.png)
 
     - Update the image version of application in yaml file of the web application and then push it to git repository.
+
+        ![img](./images/updating%20image%20tag%20in%20yaml.png)
 
     - Argo Rollouts will detect the changes and initiate a rollout process.
 
@@ -132,6 +146,8 @@ Follow these steps to set up this GitOps pipeline:
 
     Argo Rollouts will begin shifting traffic to the new version in a controlled manner, following the weight percentages (e.g., setWeight) and pausing durations (e.g., pause) defined in the rollout section of YAML file.
 
+    ![img](./images/rollout-inspect.png)
+
     *This allows for testing the new version with a small portion of user base (canary) before promoting it to everyone.*
 
 * **Promotion:**
@@ -142,10 +158,50 @@ Follow these steps to set up this GitOps pipeline:
     kubectl argo rollouts promote myapp-rollout
     ```
 
+    ![img](./images/after%20promoting.png)
+
 * **Rollout Completion:** 
     
     Once the rollout reaches 100% traffic weight (e.g., setWeight: 100) and a defined waiting period (e.g., pause: {duration: 10} for monitoring) elapses without any significant issues detected, the rollout is considered complete.
 
 
-    
 
+---
+## Resource cleanup
+
+**Method 1: Using Argo CD UI:**
+
+1. Access Argo CD: Open the Argo CD web interface at http://localhost:80.
+2. Select Application: Navigate to the application you want to clean up.
+3. Delete Application: Click on the "Delete" button and confirm the deletion.
+
+*This action will automatically cascade and remove all resources associated with the application that Argo CD manages.*
+
+**Method 2: Using kubectl:**
+
+* Identify Resources: Use the following command to list all resources in your cluster associated with the Argo CD application:
+    ```
+    kubectl get all -n argocd
+    kubectl get all -n argo-rollouts
+    ```
+
+    
+* Delete Resources: You can selectively delete individual resources using the kubectl delete command:
+    ```bash
+    kubectl delete deployment <deployment-name> -n <desiredNamespace>
+    kubectl delete service <service-name> -n <desiredNamespace>
+    # ... and so on for other resources
+    ```
+----
+## Potential Challenges with this GitOps Pipeline
+
+**1. Managing Multiple Applications:** 
+    As the number of applications you manage through the pipeline increases, maintaining and synchronizing their configurations can become complex.
+
+Potential Solution - Start with a Simple Setup: Begin with a single application and gradually scale up as you gain confidence and experience.
+
+**2. Visibility into Rollouts:**
+
+Tracking the progress and health of rollouts, especially during canary deployments, can require additional monitoring tools or integrations.
+
+Potential Solution - Integrate tools like Prometheus and Grafana to monitor application health and track rollout progress.
