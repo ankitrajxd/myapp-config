@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: myapp-rollout
-          image: ankitrajxd/myapp:1.5 
+          image: ankitrajxd/myapp:1.6 
           ports:
             - containerPort: 80
 ---
